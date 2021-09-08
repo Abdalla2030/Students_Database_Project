@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1628624755 source:c:\users\dreamonline\onedrive - cairo university - students\desktop\test\main.cpp
+	<iostream>
+	<stack>
+	<vector>
+	<queue>
+	<list>
+	<set>
+	<algorithm>
+

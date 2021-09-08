@@ -1,0 +1,230 @@
+// Abdalla Fadl Shehata
+// Sep , 2021
+#include <iostream>
+#include <cstring>
+using namespace std ;
+///////////////////////////////////////////////
+const int MAX_NAME = 14 ;
+enum Gender {MALE,FEMALE};
+struct Date {
+     int year; int month ; int day;
+};
+///////////////////////////////////////////////////
+struct Student {
+  int id ;
+  char first_name[MAX_NAME+1];
+  char last_name [MAX_NAME+1];
+  Date birth_date;
+  Gender gender;
+  double gpa;
+};
+/////////////////////////////////
+void InputStudent(Student *s){
+     string mf ;    char ch ;
+     cout <<"ENTER THE ID : ";
+     cin >> s->id ;
+     cout<<"ENTER THE FIRST NAME : ";//
+     cin >> s->first_name ;
+     cout<<"ENTER THE SECOND NAME : ";//
+     cin >> s->last_name;
+     cout<< "ENTER THE DATE  : ";
+     cin >>s->birth_date.day;
+     cin >> ch ;
+     cin >>s-> birth_date.month;
+     cin >> ch ;
+     cin >>s->birth_date.year;
+     cout<<"ENTER THE GENDER : ";
+     cin >> mf ;
+     if (mf =="MALE"){
+       s->gender = MALE ;
+     }
+     else {
+          s->gender = FEMALE ;
+     }
+     cout<<"ENTER THE GPA : ";
+     cin >> s->gpa;
+}
+////////////////////////////////////////
+void OutputStudent (Student *s){
+      cout<<"\t \t ===================================== " <<endl;
+      cout<<"id : " <<s->id<<" | first_name : " <<s->first_name<<" |  last_name : "<<s->last_name;
+      cout<< " | birth_date : " ;
+      cout<<s->birth_date.day<<"\\";
+      cout<<s->birth_date.month<<"\\";
+     cout<<s->birth_date.year<<" ";
+      cout << " | gender : " ;
+     if (s->gender == MALE ){
+       cout<<"MALE"<<" ";
+     }
+     else {
+          cout<<"FEMALE"<<" ";
+     }
+     cout<< " | gpa : "<< s->gpa<<endl;
+     cout<<"\t \t ===================================== "<<endl;
+}
+///////////////////////////////////////
+void InputAllStudent (Student *s,int size ){
+     for (int i = 0 ; i < size; i++){
+     cout<<" ENTER THE DATA OF student ( "<<i+1<<" ) "<<endl;
+     InputStudent(&s[i] );
+     }
+}
+///////////////////////////////////////////
+void OutputAllStudent(Student *s,int size){
+     for (int i=0 ;i<size ;i++){
+     cout<<"THE DATA OF STUDENT "<<i+1<<endl;
+     OutputStudent(&s[i]);
+     }
+}
+///////////////////////////////////////////
+bool BirthLess (Student *a , Student *b){
+     if (a->birth_date.year <  b->birth_date.year  ){
+          return true ;
+     }
+     else if (a->birth_date.year >  b->birth_date.year  ){
+         return false ;
+     }
+     else if (a->birth_date.month <  b->birth_date.month ){
+          return true;
+     }
+     else if (a->birth_date.month >  b->birth_date.month ){
+          return false ;
+     }
+     else if (a->birth_date.day <   b->birth_date.day ){
+          return true;
+     }
+    else {
+          return false;
+     }
+}
+///////////////////////////////////////////
+bool GpaGreater (Student *a , Student *b){
+      if (a->gpa >=  b->gpa ){
+           return true ;
+      }
+      return false ;
+}
+///////////////////////////////////////////////
+void SortStudentsByBirthDate(Student *s,int n){
+     for (int i = 0 ; i < n-1 ; i++){
+            for (int j = i+1 ; j < n ; j++){
+                 if (BirthLess (&s[i] , &s[j] )){
+                    Student temp ;
+                    temp = s[i];
+                   s[i] = s[j];
+                   s[j] = temp;
+                }
+       }
+     }
+    OutputAllStudent(s,n);
+}
+/////////////////////////////////////////////////
+void SortStudentsByGpa(Student* s, int n ){
+for (int i = 0 ; i < n-1 ; i++){
+          for (int j = i+1 ; j < n ; j++){
+              if (!GpaGreater(&s[i],&s[j] )){
+                       Student temp ;
+                       temp = s[i] ;
+                       s[i] = s[j];
+                       s[j] = temp;
+             }
+          }
+}
+   OutputAllStudent(s,n);
+}
+////////////////////////////////////////////////
+Student* SearchStudentId(Student* s, int n, int id){
+   for (int i = 0 ; i < n ; i++){
+        if (s[i].id == id ){
+           return &s[i];
+        }
+   }
+return 0 ;
+}
+/////////////////////////////////////////////////
+Student* SearchStudentFirstName(Student* s, int n, char* name ){
+for (int i = 0 ; i < n ; i++){
+         int a = strcmp(s[i].first_name , name );
+        if (a == 0  ){
+           return &s[i];
+        }
+   }
+return 0 ;
+}
+//////////////////////////////////////////////////
+void list (){
+cout<<"1)Output all students data."<<endl;
+cout<<"2)Sort students by increasing birth date."<<endl;
+cout<<"3)Sort students by decreasing gpa."<<endl;
+cout<<"4)Search students by id."<<endl;
+cout<<"5)Search students by first name."<<endl;
+cout<<"6)Exit the program."<<endl;
+}
+/////////////////////////////////////////////////
+int main()
+{
+    int num;
+    cout<<"===================================== " <<endl;
+    cout<<"ENTER THE NUMBER OF STUDENT : ";
+    cin >> num ;
+    cout<<"=====================================  " <<endl;
+    Student *s = new Student[num];
+    InputAllStudent(s,num );
+    int choice ;
+    bool b = true ;
+    while (b){
+    list();
+    cin >> choice;
+    switch (choice ){
+case 1 :
+    OutputAllStudent(s,num);
+    break ;
+case 2 :
+    SortStudentsByBirthDate(s,num);
+    break ;
+case 3 :
+    SortStudentsByGpa(s,num);
+    break ;
+case 4 :
+    {
+    int id ;
+    cout<<"ENTER THE ID"<<endl;
+    cin >> id ;
+    Student* temp1 = SearchStudentId(s,num,id);
+    if (temp1==0){
+    cout<<"*********************"<<endl;
+    cout<<"* STUDENT NOT FOUND *"<<endl;
+    cout<<"*********************"<<endl;
+    }
+    else {
+    OutputStudent(temp1 ) ;
+    }
+    break ;
+    }
+case 5 :
+    {
+   char *arr ;
+   arr = new char[MAX_NAME+1];
+    cout<<"ENTER THE NAME"<<endl;
+    cin >> arr ;
+    Student* temp2 = SearchStudentFirstName(s,num,arr);
+    if (temp2==0){
+    cout<<"*********************"<<endl;
+    cout<<"* STUDENT NOT FOUND *"<<endl;
+    cout<<"*********************"<<endl;
+    }
+    else {
+    OutputStudent(temp2) ;
+    }
+    break ;
+    }
+case 6 :
+    b = false ;
+    break ;
+default :
+    break ;
+    }
+    }
+    delete[] s;
+    return 0;
+}
